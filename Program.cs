@@ -27,6 +27,7 @@ builder.Services.Configure<JwtSettings>(
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IRideService, RideService>();
+builder.Services.AddScoped<IRideMatchingService, RideMatchingService>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
