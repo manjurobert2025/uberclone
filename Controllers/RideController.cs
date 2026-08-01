@@ -57,6 +57,16 @@ namespace Uber.API.Controllers
 
             return Ok("Ride completed successfully.");
         }
+        [HttpPost("{rideId}/reject")]
+        public async Task<IActionResult> RejectRide(Guid rideId)
+        {
+            var rejected = await _rideService.RejectRideAsync(rideId);
+
+            if (!rejected)
+                return BadRequest("Ride cannot be rejected.");
+
+            return Ok("Ride rejected successfully.");
+        }
         [Authorize]
         [HttpPost("book")]
         public async Task<IActionResult> BookRide([FromBody] BookRideDto dto)
