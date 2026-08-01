@@ -22,5 +22,33 @@ namespace Uber.API.Controllers
 
             return Ok(result);
         }
+        [HttpPut("{driverId}/status")]
+        public async Task<IActionResult> UpdateStatus(
+         Guid driverId,
+         DriverStatusDto dto)
+        {
+            var result = await _driverService.UpdateDriverStatus(driverId, dto.IsOnline);
+
+            if (!result)
+                return NotFound();
+
+            return Ok();
+        }
+
+        [HttpPut("{driverId}/location")]
+        public async Task<IActionResult> UpdateLocation(
+    Guid driverId,
+    UpdateLocationDto dto)
+        {
+            var result = await _driverService.UpdateLocationAsync(driverId, dto);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(new
+            {
+                message = "Location updated successfully"
+            });
+        }
     }
 }

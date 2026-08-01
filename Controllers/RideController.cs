@@ -17,7 +17,46 @@ namespace Uber.API.Controllers
         {
             _rideService = rideService;
         }
+        [HttpGet("pending/{driverId}")]
+        public async Task<IActionResult> GetPendingRide(Guid driverId)
+        {
+            var ride = await _rideService.GetPendingRideAsync(driverId);
 
+            if (ride == null)
+                return NoContent();
+
+            return Ok(ride);
+        }
+        [HttpPost("accept")]
+        public async Task<IActionResult> AcceptRide(Guid rideId, Guid driverId)
+        {
+            var accepted = await _rideService.AcceptRideAsync(rideId, driverId);
+
+            if (!accepted)
+                return BadRequest("Ride cannot be accepted.");
+
+            return Ok("Ride accepted successfully.");
+        }
+        [HttpPost("{rideId}/start")]
+        public async Task<IActionResult> StartRide(Guid rideId)
+        {
+            var started = await _rideService.StartRideAsync(rideId);
+
+            if (!started)
+                return BadRequest("Ride cannot be started.");
+
+            return Ok("Ride started successfully.");
+        }
+        [HttpPost("{rideId}/complete")]
+        public async Task<IActionResult> CompleteRide(Guid rideId)
+        {
+            var completed = await _rideService.CompleteRideAsync(rideId);
+
+            if (!completed)
+                return BadRequest("Ride cannot be completed.");
+
+            return Ok("Ride completed successfully.");
+        }
         [Authorize]
         [HttpPost("book")]
         public async Task<IActionResult> BookRide([FromBody] BookRideDto dto)

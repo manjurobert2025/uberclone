@@ -29,12 +29,9 @@ namespace Uber.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
-            var token = await _authService.LoginAsync(dto);
+            var result = await _authService.LoginAsync(dto);
 
-            return Ok(new
-            {
-                token = token
-            });
+            return Ok(result);
         }
     }
 }
