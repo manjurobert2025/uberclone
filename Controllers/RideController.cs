@@ -17,7 +17,7 @@ namespace Uber.API.Controllers
         {
             _rideService = rideService;
         }
-        [HttpGet("pending/{driverId}")]
+        [HttpGet("driver/{driverId}/pending")]
         public async Task<IActionResult> GetPendingRide(Guid driverId)
         {
             var ride = await _rideService.GetPendingRideAsync(driverId);
@@ -27,8 +27,10 @@ namespace Uber.API.Controllers
 
             return Ok(ride);
         }
-        [HttpPost("accept")]
-        public async Task<IActionResult> AcceptRide(Guid rideId, Guid driverId)
+        [HttpPost("{rideId}/accept")]
+        public async Task<IActionResult> AcceptRide(
+    Guid rideId,
+    [FromQuery] Guid driverId)
         {
             var accepted = await _rideService.AcceptRideAsync(rideId, driverId);
 
