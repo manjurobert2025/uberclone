@@ -27,6 +27,16 @@ namespace Uber.API.Controllers
 
             return Ok(ride);
         }
+        [HttpGet("{rideId}")]
+        public async Task<IActionResult> GetRideById(Guid rideId)
+        {
+            var ride = await _rideService.GetRideByIdAsync(rideId);
+
+            if (ride == null)
+                return NotFound("Ride not found.");
+
+            return Ok(ride);
+        }
         [HttpPost("{rideId}/accept")]
         public async Task<IActionResult> AcceptRide(
     Guid rideId,

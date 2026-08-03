@@ -12,7 +12,8 @@ using Uber.Domain.Entities;
 using Uber.Infrastructure.Data;
 using Uber.Infrastructure.Services;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Models;
+using Uber.Application.Settings;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -101,6 +102,10 @@ builder.Services.AddCors(options =>
     });
 });
 builder.WebHost.UseUrls("http://0.0.0.0:5150", "https://0.0.0.0:7197");
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
