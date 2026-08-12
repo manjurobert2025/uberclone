@@ -97,9 +97,18 @@ namespace Uber.API.Controllers
 
             dto.RiderId = Guid.Parse(riderId);
 
-            var result = await _rideService.BookRideAsync(dto);
+            var rideId = await _rideService.BookRideAsync(dto);
 
-            return Ok(result);
+            if (rideId == null)
+            {
+                return BadRequest("Ride could not be booked.");
+            }
+
+            return Ok(new
+            {
+                message = "Ride booked successfully.",
+                rideId = rideId
+            });
         }
     }
 }
