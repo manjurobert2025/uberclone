@@ -10,6 +10,18 @@ namespace Uber.API.Hubs
             await base.OnConnectedAsync();
         }
 
+        public async Task JoinDriver(string driverId)
+        {
+            await Groups.AddToGroupAsync(
+                Context.ConnectionId,
+                $"driver-{driverId}"
+            );
+
+            Console.WriteLine(
+                $"Driver {driverId} joined SignalR group. Connection: {Context.ConnectionId}"
+            );
+        }
+
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             Console.WriteLine($"Disconnected: {Context.ConnectionId}");

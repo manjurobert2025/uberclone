@@ -13,7 +13,7 @@ using Uber.Infrastructure.Data;
 using Uber.Infrastructure.Services;
 using Microsoft.OpenApi.Models;
 using Uber.Application.Settings;
-
+using Uber.API;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -96,9 +96,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReact", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins(
+                "http://localhost:8085",
+                "http://localhost:8082"
+            )
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 builder.WebHost.UseUrls("http://0.0.0.0:5150", "https://0.0.0.0:7197");
@@ -106,6 +110,13 @@ builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<
+    IRideNotificationService,
+    RideNotificationService>();
+builder.Services.AddScoped<IRideMatchingService, RideMatchingService>();
+builder.Services.Configure<RazorpaySettings>(
+    builder.Configuration.GetSection("RazorpaySettings"));
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
